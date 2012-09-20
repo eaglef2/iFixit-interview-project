@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd ">
+
+<html xmlns="http://www.w3.org/1999/xhtml " xml:lang="en" lang="en">
+	<head>
+		
+	</head>
+	
+	<body>
+		<p id="demo">Hi</p>
+		<p id="aa">fail</p>
+	
+		<script src = "mootools-core-1.4.5-full-compat.js">
+		</script>
+		<script src = "mootools-more-1.4.0.1.js"></script>
+		
+		<script>
+		try {
+			function read(data) {
+				document.getElementById("aa").innerHTML = "success";
+				document.getElementById("demo").innerHTML = data[0].device;
+			}
+			
+			var myJSONP = new Request.JSONP( {
+				url: "http://www.ifixit.com/api/0.1/devices?jsonp=read",
+			}).send();
+		}
+		catch (err) {
+			document.write("ERROR\n");
+			document.write(err.message);
+		}
+		</script>
+	</body>
+</html>
