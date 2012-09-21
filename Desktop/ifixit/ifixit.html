@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd ">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd ">
 
 <html xmlns="http://www.w3.org/1999/xhtml " xml:lang="en" lang="en">
 	<head>
@@ -6,8 +7,11 @@
 	</head>
 	
 	<body>
-		<p id="demo">Hi</p>
+		<p id="demo"></p>
 		<p id="aa">fail</p>
+		<div style="{height: '600px';width: '800px'}" id="outerDiv">
+		</div>
+		
 	
 		<script src = "mootools-core-1.4.5-full-compat.js">
 		</script>
@@ -15,13 +19,57 @@
 		
 		<script>
 		try {
+			var div = document.id("outerDiv");
+			
+			
 			function read(data) {
-				document.getElementById("aa").innerHTML = "success";
-				document.getElementById("demo").innerHTML = data[0].device;
+				document.getElementById("aa").innerHTML =
+					"success";
+				
+				for (var a = 0; a < 20; a++) {
+					var imgJSONP = new Request.JSONP( {
+						url: "http://www.ifixit.com/api/0.1/device/" 
+						    + data[a].device + "?jsonp=display"
+					}).send();
+				}
+			}
+			
+			function display(data) {
+				var newDiv = new Element('div', {
+					id: 'innerDiv',
+					styles: {
+						display: 'inline',
+						height: '100px',
+						width: '100px',
+						padding: "10px 10px"
+					}
+				});
+				var elementAdd = new Element('img', {
+					id: 'Image',
+					styles: {
+						height: "100px",
+						width: "100px"
+					},
+					src: "",
+					title: ""
+				});
+				
+				elementAdd.inject(newDiv);
+				document.getElementById("aa").innerHTML = "pass";
+				var imageurl = data.image.text;
+				if (imageurl != null) {
+					elementAdd.src = imageurl;	
+				}
+				else {
+					elementAdd.src = "NoImage.png";
+				}
+				elementAdd.title = data.title;
+				newDiv.inject(div);
 			}
 			
 			var myJSONP = new Request.JSONP( {
-				url: "http://www.ifixit.com/api/0.1/devices?jsonp=read",
+				url: "http://www.ifixit.com/api/0.1/devices?"
+				    + "jsonp=read",
 			}).send();
 		}
 		catch (err) {
