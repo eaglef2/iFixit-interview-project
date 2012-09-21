@@ -41,6 +41,7 @@
 						display: 'inline',
 						height: '100px',
 						width: '100px',
+						padding: "10px 10px"
 					}
 				});
 				var elementAdd = new Element('img', {
@@ -50,7 +51,7 @@
 						width: "100px"
 					},
 					src: "",
-					alt: ""
+					title: ""
 				});
 				
 				elementAdd.inject(newDiv);
@@ -59,7 +60,10 @@
 				if (imageurl != null) {
 					elementAdd.src = imageurl;	
 				}
-				elementAdd.alt = data.title;
+				else {
+					elementAdd.src = "NoImage.png";
+				}
+				elementAdd.title = data.title;
 				newDiv.inject(div);
 			}
 			
