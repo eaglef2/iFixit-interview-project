@@ -9,7 +9,11 @@
 	<body>
 		<p id="demo"></p>
 		<p id="aa">fail</p>
-		<div style="{height: '600px';width: '800px'}" id="outerDiv">
+		<div style="" id="outerDiv">
+		</div>
+		<div id="page">
+			<button type="button" onclick="prevPage()">Prev</button>
+			<button type="button" onclick="nextPage()">Next</button>
 		</div>
 		
 	
@@ -19,12 +23,35 @@
 		
 		<script>
 		try {
-			var div = document.id("outerDiv");
+			page = 1;
+			var div = new Element(document.id("outerDiv"));
 			
+			function nextPage() {
+				div.empty();
+				var myJSONP = new Request.JSONP( {
+					url: "http://www.ifixit.com/api/0.1/devices?"
+						+ "jsonp=read&offset=" + 20*(page - 1),
+				}).send();
+				page++;
+			}
+			
+			function prevPage() {
+				if (page <= 1)
+					return;
+				
+				else {
+					page--;
+					div.empty();
+					var myJSONP = new Request.JSONP( {
+						url: "http://www.ifixit.com/api/0.1/devices?"
+							+ "jsonp=read&offset=" + 20*(page - 1),
+					}).send();
+				}
+			}
 			
 			function read(data) {
 				document.getElementById("aa").innerHTML =
-					"success";
+					"success " + page;
 				
 				for (var a = 0; a < 20; a++) {
 					var imgJSONP = new Request.JSONP( {
@@ -48,14 +75,15 @@
 					id: 'Image',
 					styles: {
 						height: "100px",
-						width: "100px"
+						width: "100px",
+						border: "1px solid black"
 					},
 					src: "",
 					title: ""
 				});
 				
 				elementAdd.inject(newDiv);
-				document.getElementById("aa").innerHTML = "pass";
+				document.getElementById("aa").innerHTML = "page " + page;
 				var imageurl = data.image.text;
 				if (imageurl != null) {
 					elementAdd.src = imageurl;	
@@ -69,7 +97,7 @@
 			
 			var myJSONP = new Request.JSONP( {
 				url: "http://www.ifixit.com/api/0.1/devices?"
-				    + "jsonp=read",
+					+ "jsonp=read&offset=" + 20*(page - 1),
 			}).send();
 		}
 		catch (err) {
